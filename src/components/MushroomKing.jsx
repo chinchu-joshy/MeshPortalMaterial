@@ -6,14 +6,15 @@ Command: npx gltfjsx@6.2.7 public/models/MushroomKing.gltf -o src/components/Mus
 import React, { useRef,useEffect } from 'react'
 import { useGLTF, useAnimations } from '@react-three/drei'
 
-export function MushroomKing(props) {
+export function MushroomKing({hoverStatus,...props}) {
   const group = useRef()
   const { nodes, materials, animations } = useGLTF('/models/MushroomKing.gltf')
   const { actions } = useAnimations(animations, group)
   useEffect(() => {
-    actions["Wave"].reset().fadeIn(0.6).play()
-    return ()=> actions["Wave"].fadeOut(0.6)
-  }, [])
+    const animation = hoverStatus ? "Wave" : "Idle"
+    actions[animation].reset().fadeIn(0.6).play()
+    return ()=> actions[animation].fadeOut(0.6)
+  }, [hoverStatus])
   return (
     <group ref={group} {...props} dispose={null}>
       <group name="Scene">

@@ -6,14 +6,15 @@ Command: npx gltfjsx@6.2.7 public/models/Frog.gltf -o src/components/Fish.jsx -r
 import React, { useRef, useEffect } from 'react'
 import { useGLTF, useAnimations } from '@react-three/drei'
 
-export function Fish(props) {
+export function Fish({hoverStatus,...props}) {
   const group = useRef()
   const { nodes, materials, animations } = useGLTF('/models/Frog.gltf')
   const { actions } = useAnimations(animations, group)
   useEffect(() => {
-    actions["Idle"].reset().fadeIn(0.6).play()
-    return ()=> actions["Idle"].fadeOut(0.6)
-  }, [])
+    const animation = hoverStatus ? "Wave" : "Idle"
+    actions[animation].reset().fadeIn(0.6).play()
+    return ()=> actions[animation].fadeOut(0.6)
+  }, [hoverStatus])
   
   return (
     <group ref={group} {...props} dispose={null}>

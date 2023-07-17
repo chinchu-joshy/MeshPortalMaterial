@@ -6,14 +6,16 @@ Command: npx gltfjsx@6.2.7 public/models/Dino.gltf -o src/components/Dino.jsx -r
 import React, { useRef ,useEffect} from 'react'
 import { useGLTF, useAnimations } from '@react-three/drei'
 
-export function Dino(props) {
+export function Dino({hoverStatus,...props}) {
   const group = useRef()
   const { nodes, materials, animations } = useGLTF('/models/Dino.gltf')
   const { actions } = useAnimations(animations, group)
   useEffect(() => {
-    actions["Duck"].reset().fadeIn(0.6).play()
-    return ()=> actions["Duck"].fadeOut(0.6)
-  }, [])
+    console.log(actions)
+    const animation = hoverStatus ? "Wave" : "Idle"
+    actions[animation].reset().fadeIn(0.6).play()
+    return ()=> actions[animation].fadeOut(0.6)
+  }, [hoverStatus])
   return (
     <group ref={group} {...props} dispose={null}>
       <group name="Scene">
